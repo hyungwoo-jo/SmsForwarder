@@ -1164,10 +1164,12 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
             if (MultiLanguages.isSystemLanguage(context)) {
                 R.id.rb_main_language_auto
             } else {
-                when (MultiLanguages.getAppLanguage(context)) {
-                    LocaleContract.getSimplifiedChineseLocale() -> R.id.rb_main_language_cn
-                    LocaleContract.getTraditionalChineseLocale() -> R.id.rb_main_language_tw
-                    LocaleContract.getEnglishLocale() -> R.id.rb_main_language_en
+                val appLanguage = MultiLanguages.getAppLanguage(context)
+                when {
+                    appLanguage == LocaleContract.getSimplifiedChineseLocale() -> R.id.rb_main_language_cn
+                    appLanguage == LocaleContract.getTraditionalChineseLocale() -> R.id.rb_main_language_tw
+                    appLanguage == LocaleContract.getEnglishLocale() -> R.id.rb_main_language_en
+                    appLanguage.language == Locale.KOREAN.language -> R.id.rb_main_language_ko
                     else -> R.id.rb_main_language_auto
                 }
             }
@@ -1201,6 +1203,11 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
                 R.id.rb_main_language_en -> {
                     // 英语
                     newLang = LocaleContract.getEnglishLocale()
+                    MultiLanguages.setAppLanguage(context, newLang)
+                }
+
+                R.id.rb_main_language_ko -> {
+                    newLang = Locale.KOREAN
                     MultiLanguages.setAppLanguage(context, newLang)
                 }
             }

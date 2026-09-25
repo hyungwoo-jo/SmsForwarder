@@ -2052,8 +2052,8 @@
                 <RadioGroup
                     android:id="@+id/rg_main_languages"
                     style="@style/rg_style"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:gravity="start"
+                    android:orientation="vertical">
 
                     <RadioButton
                         android:id="@+id/rb_main_language_auto"
@@ -2075,6 +2075,11 @@
                         android:id="@+id/rb_main_language_en"
                         style="@style/rg_rb_style"
                         android:text="@string/english" />
+
+                    <RadioButton
+                        android:id="@+id/rb_main_language_ko"
+                        style="@style/rg_rb_style"
+                        android:text="@string/korean" />
 
                 </RadioGroup>
 
