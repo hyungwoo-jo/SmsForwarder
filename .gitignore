@@ -27,6 +27,7 @@
 /scripts/env.local.sh
 /dist
 /logs
+/work/ko/
 *.jks
 *.keystore
 /pic/*.bkp
