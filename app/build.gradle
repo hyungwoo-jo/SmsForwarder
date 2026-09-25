@@ -127,9 +127,6 @@ android {
                 throw new GradleException("Release signing is required. Create an ignored signing.properties file or set SMSFORWARDER_SIGNING_PROPERTIES.")
             }
 
-            // Retained only until the Umeng removal in stage C.
-            buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-
             // 屏蔽 R8 stack map warning
             buildConfigField "boolean", "DISABLE_R8_WARNINGS", "true"
         }
@@ -144,8 +141,6 @@ android {
             minifyEnabled false
             // 混淆配置
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-
             // 屏蔽 R8 stack map warning
             buildConfigField "boolean", "DISABLE_R8_WARNINGS", "true"
         }
@@ -162,13 +157,6 @@ android {
     }
     def abiCodes = ['universal': 1, 'armeabi-v7a': 2, 'arm64-v8a': 3, 'x86': 4, 'x86_64': 5]
     packagingOptions {
-        //去除FrpcLib的so，用时下载并动态加载
-        if (excludeFrpclib.toBoolean()) {
-            exclude 'lib/armeabi-v7a/libgojni.so'
-            exclude 'lib/arm64-v8a/libgojni.so'
-            exclude 'lib/x86/libgojni.so'
-            exclude 'lib/x86_64/libgojni.so'
-        }
         jniLibs {
             excludes += ["kotlin/**"]
         }
@@ -289,11 +277,6 @@ dependencies {
     implementation 'com.github.xuexiangjys.AgentWeb:agentweb-download:1.0.1'//选填
     //屏幕适配AutoSize：https://github.com/JessYanCoding/AndroidAutoSize
     implementation 'me.jessyan:autosize:1.2.1'
-    //友盟统计
-    implementation 'com.umeng.umsdk:common:9.8.9'
-    implementation 'com.umeng.umsdk:asms:1.8.7.2'
-    implementation 'com.umeng.umsdk:uyumao:1.1.4'
-
     //预加载占位控件
     implementation 'me.samlss:broccoli:1.0.0'
 

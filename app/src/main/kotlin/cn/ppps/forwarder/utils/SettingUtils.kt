@@ -7,12 +7,6 @@ import com.xuexiang.xutil.resource.ResUtils.getString
 class SettingUtils private constructor() {
     companion object {
 
-        //是否启动时检查更新
-        var autoCheckUpdate: Boolean by SharedPreference(AUTO_CHECK_UPDATE, true)
-
-        //是否加入SmsF预览体验计划
-        var joinPreviewProgram: Boolean by SharedPreference(JOIN_PREVIEW_PROGRAM, false)
-
         //是否同意隐私政策
         var isAgreePrivacy: Boolean by SharedPreference(IS_AGREE_PRIVACY_KEY, false)
 
@@ -88,6 +82,9 @@ class SettingUtils private constructor() {
 
         //是否启用Cactus增强保活措施
         var enableCactus: Boolean by SharedPreference(SP_ENABLE_CACTUS, false)
+
+        // Phone-number region lookup contacts a third-party service and is off by default.
+        var enablePhoneAreaLookup: Boolean by SharedPreference(SP_ENABLE_PHONE_AREA_LOOKUP, false)
 
         //是否播放静音音乐
         var enablePlaySilenceMusic: Boolean by SharedPreference(SP_ENABLE_PLAY_SILENCE_MUSIC, false)

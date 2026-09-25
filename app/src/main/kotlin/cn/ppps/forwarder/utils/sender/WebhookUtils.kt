@@ -239,8 +239,6 @@ class WebhookUtils {
                 //代理的鉴权账号密码
                 if (setting.proxyAuthenticator && (!TextUtils.isEmpty(setting.proxyUsername) || !TextUtils.isEmpty(setting.proxyPassword))
                 ) {
-                    Log.i(TAG, "proxyUsername = ${setting.proxyUsername}, proxyPassword = ${setting.proxyPassword}")
-
                     if (setting.proxyType == Proxy.Type.HTTP) {
                         request.okproxyAuthenticator { _: Route?, response: Response ->
                             //设置代理服务器账号密码
@@ -259,8 +257,7 @@ class WebhookUtils {
                 }
             }
 
-            request.ignoreHttpsCert() //忽略https证书
-                .retryCount(SettingUtils.requestRetryTimes) //超时重试的次数
+            request.retryCount(SettingUtils.requestRetryTimes) //超时重试的次数
                 .retryDelay(SettingUtils.requestDelayTime * 1000) //超时重试的延迟时间
                 .retryIncreaseDelay(SettingUtils.requestDelayTime * 1000) //超时重试叠加延时
                 .timeStamp(true) //url自动追加时间戳，避免缓存

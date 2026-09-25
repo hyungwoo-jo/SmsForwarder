@@ -51,7 +51,6 @@ class TelegramUtils private constructor() {
             } else {
                 "https://api.telegram.org/bot" + setting.apiToken + "/sendMessage"
             }
-            Log.i(TAG, "requestUrl:$requestUrl")
 
             val request = if (setting.method == "GET") {
                 requestUrl += "?chat_id=" + setting.chatId + "&text=" + URLEncoder.encode(content, "UTF-8")
@@ -61,7 +60,6 @@ class TelegramUtils private constructor() {
                 if (setting.messageThreadId.isNotEmpty()) {
                     requestUrl += "&message_thread_id=" + setting.messageThreadId
                 }
-                Log.i(TAG, "requestUrl:$requestUrl")
                 XHttp.get(requestUrl)
             } else {
                 val bodyMap: MutableMap<String, Any> = mutableMapOf()
@@ -86,7 +84,6 @@ class TelegramUtils private constructor() {
                 }
                 bodyMap["disable_web_page_preview"] = "true"
                 val requestMsg: String = Gson().toJson(bodyMap)
-                Log.i(TAG, "requestMsg:$requestMsg")
                 XHttp.post(requestUrl).upJson(requestMsg)
             }
 
@@ -104,8 +101,6 @@ class TelegramUtils private constructor() {
                 //代理的鉴权账号密码
                 if (setting.proxyAuthenticator && (!TextUtils.isEmpty(setting.proxyUsername) || !TextUtils.isEmpty(setting.proxyPassword))
                 ) {
-                    Log.i(TAG, "proxyUsername = ${setting.proxyUsername}, proxyPassword = ${setting.proxyPassword}")
-
                     if (setting.proxyType == Proxy.Type.HTTP) {
                         request.okproxyAuthenticator { _: Route?, response: Response ->
                             //设置代理服务器账号密码
@@ -125,7 +120,6 @@ class TelegramUtils private constructor() {
             }
 
             request.keepJson(true)
-                //.ignoreHttpsCert()
                 .retryCount(SettingUtils.requestRetryTimes) //超时重试的次数
                 .retryDelay(SettingUtils.requestDelayTime * 1000) //超时重试的延迟时间
                 .retryIncreaseDelay(SettingUtils.requestDelayTime * 1000) //超时重试叠加延时

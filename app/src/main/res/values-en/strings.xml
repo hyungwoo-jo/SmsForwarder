@@ -89,7 +89,6 @@
     <string name="url_help">https://gitee.com/pp/SmsForwarder/wikis/pages</string>
     <string name="url_donation_link">https://gitee.com/pp/SmsForwarder.wiki/raw/master/%E6%89%93%E8%B5%8F%E5%90%8D%E5%8D%95.md</string>
     <string name="url_wechat_miniprogram">https://gitee.com/pp/SmsForwarder/raw/main/pic/wechat_miniprogram.jpg</string>
-    <string name="url_tips">https://gitee.com/pp/SmsForwarder.wiki/raw/master/tips_en.json</string>
 
     <string name="lab_yes">Yes</string>
     <string name="lab_no">No</string>
@@ -576,10 +575,6 @@
     <string name="refresh">Refresh</string>
     <string name="tip_can_not_get_sim_infos">Please confirm that the app permission [Get mobile phone information] is [Always allow]</string>
     <string name="tip_can_not_get_sim_info">The SIM card information in the card slot %d has not been obtained</string>
-    <string name="auto_check">Auto check</string>
-    <string name="check_update">Check</string>
-    <string name="join_preview_program">Join Preview Program</string>
-    <string name="join_preview_program_tips">Check out weekly builds of SmsF for early access to new features and bug fixes</string>
     <string name="clear_cache">Clear</string>
     <string name="delete_frpc">Delete</string>
 

@@ -115,11 +115,11 @@
     <string name="about_item_gitee">Gitee</string>
     <string name="about_item_donation_link">打赏名单</string>
     <string name="url_project_github">https://github.com/pppscn/SmsForwarder</string>
+    <string name="url_project_releases">https://github.com/hyungwoo-jo/SmsForwarder/releases</string>
     <string name="url_project_gitee">https://gitee.com/pp/SmsForwarder</string>
     <string name="url_help">https://gitee.com/pp/SmsForwarder/wikis/pages</string>
     <string name="url_donation_link">https://gitee.com/pp/SmsForwarder.wiki/raw/master/%E6%89%93%E8%B5%8F%E5%90%8D%E5%8D%95.md</string>
     <string name="url_wechat_miniprogram">https://gitee.com/pp/SmsForwarder/raw/main/pic/wechat_miniprogram.jpg</string>
-    <string name="url_tips">https://gitee.com/pp/SmsForwarder.wiki/raw/master/tips.json</string>
 
     <string name="lab_yes">是</string>
     <string name="lab_no">否</string>
@@ -405,6 +405,8 @@
     <string name="battery_setting_tips">请设置为手动管理：允许自启动、允许关联启动、允许后台运行</string>
     <string name="unknown_number">未知号码</string>
     <string name="unknown_area">未知归属地</string>
+    <string name="phone_area_lookup">번호 지역 조회</string>
+    <string name="phone_area_lookup_tips">외부 서비스에 번호를 전송합니다. 기본값은 꺼짐입니다.</string>
     <string name="unsupport">您的手机不支持此设置</string>
     <string name="isIgnored">已将省电优化设置为无限制(不优化)！</string>
     <string name="isIgnored2">本界面无法直接操作系统的省电优化设置</string>
@@ -607,10 +609,7 @@
     <string name="refresh">刷新</string>
     <string name="tip_can_not_get_sim_infos">无法获取卡槽信息，请确认应用权限【获取手机信息】为【始终允许】</string>
     <string name="tip_can_not_get_sim_info">未获取到卡槽%d中的SIM卡信息</string>
-    <string name="auto_check">启动时检查</string>
-    <string name="check_update">检查更新</string>
-    <string name="join_preview_program">加入SmsF预览体验计划</string>
-    <string name="join_preview_program_tips">检查SmsF每周构建版更新，率先体验新功能与Bug修复</string>
+    <string name="open_releases">릴리스 열기</string>
     <string name="clear_cache">清理缓存</string>
     <string name="delete_frpc">删除动态库</string>
 

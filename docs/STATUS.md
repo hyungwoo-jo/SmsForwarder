@@ -4,7 +4,7 @@
 |---|---|---|---|
 | A | DONE | Fork, source pin, project records | `origin` is `hyungwoo-jo/SmsForwarder`; `upstream` is `pppscn/SmsForwarder`; branch `personal/ko-local` starts at `a3d2302`. |
 | B | DONE | JDK 11, Android SDK, app ID, debug build | JDK 11.0.32.1, API 33, Build Tools 33.0.1, and a verified universal debug APK. |
-| C | TODO | Umeng, automatic network traffic, TLS, log secrets | Implement after the first repeatable debug build. |
+| C | DONE | Umeng, automatic network traffic, TLS, log secrets | Verified clean debug build with bundled FRPC libraries and no Umeng native artifact. |
 | D | TODO | Korean resources and language selection | Start after source/build structure is stable. |
 | E | TODO | Automated regression checks | Add meaningful localization and transport tests. |
 | F | TODO | Local personal signing and release APK | Requires a private signing key after release build works. |
@@ -32,3 +32,18 @@
 - Baseline universal debug APK: `SmsF_3.5.0.260925_100055_universal_debug.apk`.
 - The debug APK uses the standard Android debug certificate. Release signing is
   intentionally deferred to stage F.
+
+## Stage C record
+
+- Removed Umeng analytics, XUpdate, automatic startup checks, remote guide fetch,
+  and the runtime FRPC download path.
+- The About screen opens this fork's releases page only when chosen by the user.
+- `libgojni.so` is stored in the Android native-library source set for all four
+  supported ABIs and is loaded from the installed APK.
+- Sender paths use normal TLS certificate verification. The shared transfer-log
+  interceptor redacts credentials, tokens, message content, and authorization
+  headers before persisting diagnostics.
+- Phone-area lookup is disabled by default and now has an explicit settings
+  control because it sends the queried phone number to a third-party service.
+- Clean debug build: `:app:clean :app:assembleDebug`; universal APK SHA-256:
+  `6f3fa0f3dd7e9124b688106b4119c54b16472f39c34fa11f58c6abc41284dceb`.

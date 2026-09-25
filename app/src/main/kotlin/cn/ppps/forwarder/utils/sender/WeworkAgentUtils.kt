@@ -82,7 +82,6 @@ class WeworkAgentUtils private constructor() {
             }
 
             request.keepJson(true)
-                .ignoreHttpsCert()
                 .retryCount(SettingUtils.requestRetryTimes) //超时重试的次数
                 .retryDelay(SettingUtils.requestDelayTime * 1000) //超时重试的延迟时间
                 .retryIncreaseDelay(SettingUtils.requestDelayTime * 1000) //超时重试叠加延时
@@ -179,7 +178,6 @@ class WeworkAgentUtils private constructor() {
 
             request.upJson(requestMsg)
                 .keepJson(true)
-                .ignoreHttpsCert()
                 .retryCount(SettingUtils.requestRetryTimes) //超时重试的次数
                 .retryDelay(SettingUtils.requestDelayTime * 1000) //超时重试的延迟时间
                 .retryIncreaseDelay(SettingUtils.requestDelayTime * 1000) //超时重试叠加延时

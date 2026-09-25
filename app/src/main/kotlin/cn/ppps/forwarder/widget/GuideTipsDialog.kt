@@ -6,17 +6,11 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
 import cn.ppps.forwarder.R
 import cn.ppps.forwarder.core.http.entity.TipInfo
 import cn.ppps.forwarder.utils.AppUtils
 import cn.ppps.forwarder.utils.SharedPreference
 import com.xuexiang.xaop.annotation.SingleClick
-import com.xuexiang.xhttp2.XHttp
-import com.xuexiang.xhttp2.callback.SimpleCallBack
-import com.xuexiang.xhttp2.exception.ApiException
 import com.xuexiang.xui.widget.dialog.BaseDialog
 import com.xuexiang.xutil.resource.ResUtils.getString
 import com.zzhoujay.richtext.RichText
@@ -165,33 +159,17 @@ class GuideTipsDialog(context: Context?, tips: List<TipInfo>) :
          */
         @JvmStatic
         fun showTipsForce(context: Context?) {
-            XHttp.get(getString(R.string.url_tips))
-                .keepJson(true)
-                .ignoreHttpsCert()
-                .timeStamp(true) //url自动追加时间戳，避免缓存
-                .execute(object : SimpleCallBack<String>() {
-                    override fun onError(e: ApiException) {
-                        e.printStackTrace()
-                    }
-
-                    override fun onSuccess(json: String) {
-                        try {
-                            val gson = Gson()
-                            val jsonObject = gson.fromJson(json, JsonObject::class.java)
-                            if (jsonObject.isJsonObject
-                                && jsonObject.has("Code") && jsonObject["Code"].asInt == 0
-                                && jsonObject.has("Data") && jsonObject["Data"].isJsonArray
-                            ) {
-                                val dataJsonArray = jsonObject["Data"].asJsonArray
-                                val listType = object : TypeToken<List<TipInfo>>() {}.type
-                                val tips = gson.fromJson<List<TipInfo>>(dataJsonArray, listType)
-                                GuideTipsDialog(context, tips).show()
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                })
+            val tips = listOf(
+                TipInfo().apply {
+                    title = "개인판 안내"
+                    content = "이 앱은 개인용 빌드입니다.<br>전송 대상과 규칙은 본인이 관리하는 서비스만 사용하세요."
+                },
+                TipInfo().apply {
+                    title = "업데이트"
+                    content = "자동 업데이트 검사는 하지 않습니다.<br>새 버전은 설정의 앱 정보에서 릴리스 페이지를 열어 확인할 수 있습니다."
+                }
+            )
+            GuideTipsDialog(context, tips).show()
         }
 
         fun setIsIgnoreTips(isIgnore: Boolean): Boolean {

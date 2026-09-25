@@ -35,14 +35,17 @@ the build environment is ready.
 
 - Universal output:
   `build/app/outputs/apk/debug/SmsF_3.5.0.260925_100055_universal_debug.apk`.
-- APK SHA-256:
-  `b223bcc21da6aba867f10e9ae909ebeaa90f92418deffe4cd7d31aa66b8a6854`.
+- Stage C clean-build APK SHA-256:
+  `6f3fa0f3dd7e9124b688106b4119c54b16472f39c34fa11f58c6abc41284dceb`.
 - Package ID: `com.hwserve.smsforwarder.debug`.
 - Label: `SMS 자동전달 · 개인판`.
 - Minimum/target SDK: 19 / 33.
 - Verification: APK Signature Scheme v1 and v2 succeeded using the standard
   Android debug certificate. The `apksigner` warnings concern legacy
   unprotected `META-INF` entries and will be addressed before release signing.
+- Stage C packaging: the universal debug APK is 47,712,267 bytes and includes
+  `libgojni.so` for arm64-v8a, armeabi-v7a, x86, and x86_64. A clean build
+  contains no `libumeng-spy.so` artifact.
 
 ## Dependency repositories
 

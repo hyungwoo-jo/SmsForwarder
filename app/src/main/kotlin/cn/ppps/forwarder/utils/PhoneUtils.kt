@@ -423,6 +423,9 @@ class PhoneUtils private constructor() {
 
         // 获取号码归属地
         fun getPhoneArea(phoneNumber: String): String {
+            if (!SettingUtils.enablePhoneAreaLookup) {
+                return getString(R.string.unknown_area)
+            }
             val client = OkHttpClient()
             val url = "https://cx.shouji.360.cn/phonearea.php?number=$phoneNumber"
             val request = Request.Builder().url(url).build()
@@ -436,7 +439,6 @@ class PhoneUtils private constructor() {
                         val response = client.newCall(request).execute()
                         if (response.isSuccessful) {
                             val responseData = response.body()?.string()
-                            Log.i(TAG, "getPhoneArea: $responseData")
                             if (responseData != null) {
                                 val jsonObject = JSONObject(responseData)
                                 val data = jsonObject.getJSONObject("data")

@@ -143,6 +143,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         switchEnableSms(binding!!.sbEnableSms)
         //转发通话记录
         switchEnablePhone(binding!!.sbEnablePhone, binding!!.scbCallType1, binding!!.scbCallType2, binding!!.scbCallType3, binding!!.scbCallType4, binding!!.scbCallType5, binding!!.scbCallType6)
+        binding!!.sbEnablePhoneAreaLookup.isChecked = SettingUtils.enablePhoneAreaLookup
+        binding!!.sbEnablePhoneAreaLookup.setOnCheckedChangeListener { _, isChecked ->
+            SettingUtils.enablePhoneAreaLookup = isChecked
+        }
         //转发应用通知
         switchEnableAppNotify(binding!!.sbEnableAppNotify, binding!!.scbCancelAppNotify, binding!!.scbNotUserPresent)
 

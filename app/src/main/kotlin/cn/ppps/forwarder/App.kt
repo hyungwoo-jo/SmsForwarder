@@ -48,17 +48,13 @@ import cn.ppps.forwarder.utils.Log
 import cn.ppps.forwarder.utils.ProximitySensorScreenHelper
 import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.SharedPreference
-import cn.ppps.forwarder.utils.sdkinit.UMengInit
 import cn.ppps.forwarder.utils.sdkinit.XBasicLibInit
-import cn.ppps.forwarder.utils.sdkinit.XUpdateInit
-import cn.ppps.forwarder.utils.tinker.TinkerLoadLibrary
 import com.gyf.cactus.Cactus
 import com.gyf.cactus.callback.CactusCallback
 import com.gyf.cactus.ext.cactus
 import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
 import com.king.location.LocationClient
-import com.xuexiang.xutil.file.FileUtils
 import frpclib.Frpclib
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -186,16 +182,12 @@ class App : Application(), CactusCallback, Configuration.Provider by Core {
             //初始化WorkManager
             WorkManager.initialize(this, Configuration.Builder().build())
 
-            //动态加载FrpcLib
-            val libPath = filesDir.absolutePath + "/libs"
-            val soFile = File(libPath)
-            if (soFile.exists()) {
-                try {
-                    TinkerLoadLibrary.installNativeLibraryPath(classLoader, soFile)
-                    FrpclibInited = FileUtils.isFileExists(filesDir.absolutePath + "/libs/libgojni.so") && FRPC_LIB_VERSION == Frpclib.getVersion()
-                } catch (throwable: Throwable) {
-                    Log.e("APP", throwable.message.toString())
-                }
+            // The native FRPC library is packaged with the APK. Never fetch or load it from
+            // an upstream-controlled app-private directory at runtime.
+            try {
+                FrpclibInited = FRPC_LIB_VERSION == Frpclib.getVersion()
+            } catch (throwable: Throwable) {
+                Log.e("APP", "Bundled FRPC library failed to initialize: ${throwable.message}")
             }
 
             //启动前台服务
@@ -335,10 +327,6 @@ class App : Application(), CactusCallback, Configuration.Provider by Core {
         Log.init(applicationContext)
         // 转发历史工具类初始化
         HistoryUtils.init(applicationContext)
-        // 版本更新初始化
-        XUpdateInit.init(this)
-        // 运营统计数据
-        UMengInit.init(this)
         // 初始化语种切换框架
         MultiLanguages.init(this)
         // 设置语种变化监听器
