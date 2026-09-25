@@ -25,10 +25,18 @@ ext.enableXaop = gradle.startParameter.taskNames.any { name ->
 }
 println "[XAOP] enable = ${enableXaop}, tasks = ${gradle.startParameter.taskNames}"
 
-def keyProps = new Properties()
-def keyPropsFile = rootProject.file('keystore/keystore.properties')
-if (keyPropsFile.exists()) {
-    keyProps.load(new FileInputStream(keyPropsFile))
+def signingProps = new Properties()
+def signingPropsPath = providers.gradleProperty("signingProperties").orNull
+    ?: System.getenv("SMSFORWARDER_SIGNING_PROPERTIES")
+def signingPropsFile = signingPropsPath ? rootProject.file(signingPropsPath) : rootProject.file("signing.properties")
+if (signingPropsFile.exists()) {
+    signingProps.load(new FileInputStream(signingPropsFile))
+}
+def hasReleaseSigning = ["keyAlias", "keyPassword", "storeFile", "storePassword"].every {
+    signingProps.getProperty(it)?.trim()
+}
+def signedReleaseTaskRequested = gradle.startParameter.taskNames.any { taskName ->
+    taskName.toLowerCase() ==~ /.*(assemble|bundle|package).*release.*/
 }
 
 //打包时，记得设置true启用
@@ -68,7 +76,7 @@ android {
     def gitCommitId = getGitCommitId()
 
     defaultConfig {
-        applicationId "cn.ppps.forwarder"
+        applicationId "com.hwserve.smsforwarder"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode build_versions.version_code
@@ -93,16 +101,12 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keyProps['keyAlias']
-            keyPassword keyProps['keyPassword']
-            storeFile keyProps['storeFile'] ? file(keyProps['storeFile']) : null
-            storePassword keyProps['storePassword']
-        }
-        debug {
-            keyAlias keyProps['keyAlias']
-            keyPassword keyProps['keyPassword']
-            storeFile keyProps['storeFile'] ? file(keyProps['storeFile']) : null
-            storePassword keyProps['storePassword']
+            if (hasReleaseSigning) {
+                keyAlias signingProps['keyAlias']
+                keyPassword signingProps['keyPassword']
+                storeFile rootProject.file(signingProps['storeFile'])
+                storePassword signingProps['storePassword']
+            }
         }
     }
 
@@ -117,24 +121,14 @@ android {
             minifyEnabled true
             // 混淆配置
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (isNeedPackage.toBoolean()) {
+            if (hasReleaseSigning) {
                 signingConfig signingConfigs.release
-                if (file('local.properties').exists()) {
-                    Properties properties = new Properties()
-                    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-                    def appID = properties.getProperty("APP_ID_UMENG")
-                    if (appID != null) {
-                        buildConfigField "String", "APP_ID_UMENG", appID
-                    } else {
-                        buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-                    }
-                } else {
-                    buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-                }
-            } else {
-                signingConfig signingConfigs.debug
-                buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
+            } else if (signedReleaseTaskRequested) {
+                throw new GradleException("Release signing is required. Create an ignored signing.properties file or set SMSFORWARDER_SIGNING_PROPERTIES.")
             }
+
+            // Retained only until the Umeng removal in stage C.
+            buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
 
             // 屏蔽 R8 stack map warning
             buildConfigField "boolean", "DISABLE_R8_WARNINGS", "true"
@@ -143,30 +137,14 @@ android {
             // 调试模式开关
             debuggable true
             jniDebuggable true
+            applicationIdSuffix '.debug'
             // 移除无用的资源
-            shrinkResources true
+            shrinkResources false
             // 代码混淆开关
-            minifyEnabled true
+            minifyEnabled false
             // 混淆配置
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (isNeedPackage.toBoolean()) {
-                signingConfig signingConfigs.release
-                if (file('local.properties').exists()) {
-                    Properties properties = new Properties()
-                    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-                    def appID = properties.getProperty("APP_ID_UMENG")
-                    if (appID != null) {
-                        buildConfigField "String", "APP_ID_UMENG", appID
-                    } else {
-                        buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-                    }
-                } else {
-                    buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-                }
-            } else {
-                signingConfig signingConfigs.debug
-                buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
-            }
+            buildConfigField "String", "APP_ID_UMENG", '"60254fc7425ec25f10f4293e"'
 
             // 屏蔽 R8 stack map warning
             buildConfigField "boolean", "DISABLE_R8_WARNINGS", "true"
@@ -238,7 +216,7 @@ android {
         }
     }
     lint {
-        abortOnError false
+        abortOnError true
     }
     namespace 'cn.ppps.forwarder'
 

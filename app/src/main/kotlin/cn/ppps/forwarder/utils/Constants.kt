@@ -1,5 +1,7 @@
 package cn.ppps.forwarder.utils
 
+import cn.ppps.forwarder.BuildConfig
+
 object Worker {
     const val SEND_MSG_INFO = "send_msg_info"
     const val UPDATE_LOGS = "update_logs"
@@ -34,7 +36,8 @@ const val IS_AGREE_PRIVACY_KEY = "is_agree_privacy_key"
 
 //数据库
 const val DATABASE_NAME = "sms_forwarder.db"
-const val PACKAGE_NAME = "cn.ppps.forwarder"
+val PACKAGE_NAME: String
+    get() = BuildConfig.APPLICATION_ID
 
 //通用设置
 const val SP_ENABLE_SMS = "enable_sms"
