@@ -1238,4 +1238,9 @@
     <string name="start_discovery">Discovery</string>
     <string name="invalid_bluetooth_mac_address">Bluetooth Mac Address is invalid, eg. AA:BB:CC:DD:EE:FF</string>
     <string name="auto_start_redmi"><![CDATA[RedMi: Authorization Management -> Self-Start Management -> Allow Apps to Self-Start]]></string>
+    <string name="url_project_releases">https://github.com/hyungwoo-jo/SmsForwarder/releases</string>
+    <string name="phone_area_lookup">Phone number area lookup</string>
+    <string name="phone_area_lookup_tips">Sends the phone number to an external service. Disabled by default.</string>
+    <string name="open_releases">Open releases</string>
+    <string name="korean">한국어</string>
 </resources>

@@ -32,12 +32,7 @@ class LoggingInterceptor(private val logId: Long) : HttpLoggingInterceptor("cust
         SendUtils.updateLogs(logId, -1, safeMessage)
     }
 
-    private fun redact(message: String): String = message
-        .replace(Regex("(?i)(https?://)[^\\s/@:]+:[^\\s/@]+@"), "$1***:***@")
-        .replace(Regex("(?i)(bot)[^/\\s]+(/)"), "$1***$2")
-        .replace(Regex("(?i)(\\\"(?:api[_-]?token|access[_-]?token|app[_-]?secret|secret|password|proxy[_-]?password|authorization|cookie|text|content|message|chat_id)\\\"\\s*:\\s*\\\")[^\\\"]*"), "$1***")
-        .replace(Regex("(?i)((?:api[_-]?token|access[_-]?token|app[_-]?secret|secret|password|proxy[_-]?password|authorization|cookie|text|content|message|chat_id|sign)=)[^&\\s,}]+"), "$1***")
-        .replace(Regex("(?i)((?:authorization|proxy-authorization|cookie):\\s*)[^\\r\\n]+"), "$1***")
+    private fun redact(message: String): String = SensitiveLogRedactor.redact(message)
 
     /**
      * 记录请求日志

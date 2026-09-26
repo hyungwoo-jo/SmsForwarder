@@ -9,6 +9,7 @@ import cn.ppps.forwarder.utils.Log
 import cn.ppps.forwarder.utils.SendUtils
 import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.interceptor.LoggingInterceptor
+import cn.ppps.forwarder.utils.interceptor.SensitiveLogRedactor
 import com.google.gson.Gson
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.SimpleCallBack
@@ -135,7 +136,7 @@ class TelegramUtils private constructor() {
                     }
 
                     override fun onSuccess(response: String) {
-                        Log.i(TAG, response)
+                        Log.i(TAG, SensitiveLogRedactor.redact(response))
 
                         val resp = Gson().fromJson(response, TelegramResult::class.java)
                         val status = if (resp?.ok == true) 2 else 0

@@ -13,6 +13,7 @@ import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.interceptor.BasicAuthInterceptor
 import cn.ppps.forwarder.utils.interceptor.LoggingInterceptor
 import cn.ppps.forwarder.utils.interceptor.NoContentInterceptor
+import cn.ppps.forwarder.utils.interceptor.SensitiveLogRedactor
 import com.google.gson.Gson
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.SimpleCallBack
@@ -54,7 +55,7 @@ class WebhookUtils {
             }
 
             var requestUrl: String = setting.webServer //推送地址
-            Log.i(TAG, "requestUrl:$requestUrl")
+            Log.i(TAG, SensitiveLogRedactor.redact("requestUrl:$requestUrl"))
 
             val timestamp = System.currentTimeMillis()
             val orgContent: String = msgInfo.content
@@ -85,10 +86,10 @@ class WebhookUtils {
             val regex = "^(https?://)([^:]+):([^@]+)@(.+)"
             val matches = Regex(regex, RegexOption.IGNORE_CASE).findAll(requestUrl).toList()
                 .flatMap(MatchResult::groupValues)
-            Log.i(TAG, "matches = $matches")
+            Log.i(TAG, "Webhook basic-auth URL detected: ${matches.isNotEmpty()}")
             if (matches.isNotEmpty()) {
                 requestUrl = matches[1] + matches[4]
-                Log.i(TAG, "requestUrl:$requestUrl")
+                Log.i(TAG, SensitiveLogRedactor.redact("requestUrl:$requestUrl"))
             }
 
             //通过`Content-Type=applicaton/json`指定请求体为`json`格式
@@ -119,7 +120,7 @@ class WebhookUtils {
                     requestUrl += "&timestamp=$timestamp"
                     requestUrl += "&sign=$sign"
                 }
-                Log.d(TAG, "method = GET, Url = $requestUrl")
+                Log.d(TAG, SensitiveLogRedactor.redact("method = GET, Url = $requestUrl"))
                 XHttp.get(requestUrl).keepJson(true)
             } else if (setting.method == "GET" && !TextUtils.isEmpty(webParams)) {
                 webParams = msgInfo.replaceTemplate(webParams, "", "URLEncoder", rule?.title ?: "")
@@ -145,7 +146,7 @@ class WebhookUtils {
                 } else {
                     (if (requestUrl.contains("?")) "&" else "?") + webParams
                 }
-                Log.d(TAG, "method = GET, Url = $requestUrl")
+                Log.d(TAG, SensitiveLogRedactor.redact("method = GET, Url = $requestUrl"))
                 XHttp.get(requestUrl).keepJson(true)
             } else if (webParams.isNotEmpty() && (isJson || isText || webParams.startsWith("{"))) {
                 webParams = msgInfo.replaceTemplate(webParams, "", "Gson", rule?.title ?: "")
@@ -163,7 +164,7 @@ class WebhookUtils {
                     }
                     .replace("[timestamp]", timestamp.toString())
                     .replace("[sign]", sign)
-                Log.d(TAG, "method = ${setting.method}, Url = $requestUrl, bodyMsg = $bodyMsg")
+                Log.d(TAG, SensitiveLogRedactor.redact("method = ${setting.method}, Url = $requestUrl, bodyMsg = $bodyMsg"))
                 if (isText) {
                     when (setting.method) {
                         "PUT" -> XHttp.put(requestUrl).keepJson(true).upString(bodyMsg, mediaType)
@@ -182,7 +183,7 @@ class WebhookUtils {
                     webParams = "from=[from]&content=[content]&timestamp=[timestamp]"
                     if (!TextUtils.isEmpty(sign)) webParams += "&sign=[sign]"
                 }
-                Log.d(TAG, "method = ${setting.method}, Url = $requestUrl")
+                Log.d(TAG, SensitiveLogRedactor.redact("method = ${setting.method}, Url = $requestUrl"))
                 val postRequest = when (setting.method) {
                     "PUT" -> XHttp.put(requestUrl).keepJson(true)
                     "PATCH" -> XHttp.patch(requestUrl).keepJson(true)
@@ -274,7 +275,7 @@ class WebhookUtils {
                     }
 
                     override fun onSuccess(response: String) {
-                        Log.i(TAG, response)
+                        Log.i(TAG, SensitiveLogRedactor.redact(response))
                         val status = if (setting.response.isNotEmpty() && !response.contains(setting.response)) 0 else 2
                         SendUtils.updateLogs(logId, status, response)
                         SendUtils.senderLogic(status, msgInfo, rule, senderIndex, msgId)

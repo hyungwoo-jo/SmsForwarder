@@ -59,6 +59,12 @@ android {
         unitTests.returnDefaultValues = true
     }
 
+    lintOptions {
+        // Existing API 19 layouts use framework vector drawables; changing every
+        // layout to app:srcCompat is outside this privacy/localization change.
+        disable 'VectorDrawableCompat'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -250,7 +256,8 @@ dependencies {
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
 
     testImplementation deps.junit
-    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    // 1.3.0 requires minSdk 21 while this app supports API 19.
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation deps.espresso.core
 
     //noinspection GradleDependency

@@ -1239,4 +1239,9 @@
     <string name="start_discovery">搜索设备</string>
     <string name="invalid_bluetooth_mac_address">蓝牙设备MAC地址无效，例如：AA:BB:CC:DD:EE:FF</string>
     <string name="auto_start_redmi"><![CDATA[红米手机：授权管理 -> 自启动管理 -> 允许应用自启动]]></string>
+    <string name="url_project_releases">https://github.com/hyungwoo-jo/SmsForwarder/releases</string>
+    <string name="phone_area_lookup">号码归属地查询</string>
+    <string name="phone_area_lookup_tips">会将号码发送至外部服务，默认关闭。</string>
+    <string name="open_releases">打开发布页</string>
+    <string name="korean">한국어</string>
 </resources>
