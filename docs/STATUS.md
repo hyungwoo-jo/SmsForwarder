@@ -6,10 +6,10 @@
 | B | DONE | JDK 11, Android SDK, app ID, debug build | JDK 11.0.32.1, API 33, Build Tools 33.0.1, and a verified universal debug APK. |
 | C | DONE | Umeng, automatic network traffic, TLS, log secrets | Verified clean debug build with bundled FRPC libraries and no Umeng native artifact. |
 | D | DONE | Korean resources, language selection, and local privacy notice | 1,185 `values-ko` resources pass the localization validator; a Korean privacy notice is bundled locally; verified debug APK build completed. |
-| E | DONE (local) | Automated regression checks | Final resource/unit/lint gate passed; 9 JVM tests, 0 failures/errors. Phone/watch integration remains DEVICE_PENDING as planned. |
-| F | IN_PROGRESS | Local personal signing and release APK | Dedicated local key created with restricted permissions; release build and artifact collection scripts prepared. |
-| G | TODO | Optional GitHub Actions | Create a safe manual build workflow after local release succeeds. |
-| H | TODO | Acceptance report | Record verified facts and device-pending checks. |
+| E | DONE (local) | Automated regression checks | Final resource/unit/lint gate passed; 10 JVM tests, 0 failures/errors. Phone/watch integration remains DEVICE_PENDING as planned. |
+| F | DONE | Local personal signing and release APK | Signed arm64-v8a/universal release APKs in `dist/`, verified app ID, v1/v2 signatures, matching certificate, DEX scan and bundled FRPC. Source commit `8ddd2812`. |
+| G | OPTIONAL / NOT RUN | Optional GitHub Actions | Local build and fork push are complete. CI was not configured; private signing stays local. |
+| H | DONE (local) | Acceptance report | `docs/VALIDATION.md`, `dist/BUILD-INFO.json`, hashes, installation guide and verification reports. Device acceptance remains DEVICE_PENDING. |
 
 ## Stage A record
 

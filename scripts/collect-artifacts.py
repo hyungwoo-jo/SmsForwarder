@@ -16,6 +16,15 @@ def run(*args):
     return subprocess.check_output(args, cwd=ROOT, text=True).strip()
 metadata = json.loads((ROOT / "build/app/outputs/apk/release/output-metadata.json").read_text())
 DIST.mkdir(exist_ok=True)
+expected_files = {
+    e["outputFile"] for e in metadata["elements"]
+    if not e["filters"] or any(f.get("value") == "arm64-v8a" for f in e["filters"])
+}
+for previous in DIST.glob("*.apk"):
+    if previous.name not in expected_files:
+        archive = DIST / "archive"
+        archive.mkdir(exist_ok=True)
+        shutil.move(str(previous), str(archive / previous.name))
 artifacts = []
 for element in metadata["elements"]:
     abi = next((f["value"] for f in element["filters"] if f["filterType"] == "ABI"), "universal")

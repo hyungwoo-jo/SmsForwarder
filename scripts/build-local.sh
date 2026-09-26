@@ -11,5 +11,8 @@ if [[ -f scripts/env.local.sh ]]; then source scripts/env.local.sh; fi
 python3 scripts/check_localization.py
 python3 scripts/check_privacy.py
 bash ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug --no-daemon --console=plain -PisNeedClean=false -PisNeedPackage=false
+# The release resource merger can retain invalid generated source paths
+# after resource shrinking. Regenerate this task's outputs without a full clean.
+bash ./gradlew :app:mergeReleaseResources --rerun-tasks --no-daemon --console=plain -PisNeedClean=false -PisNeedPackage=true -PexcludeFrpclib=false
 bash ./gradlew :app:assembleRelease :app:lintRelease --no-daemon --console=plain --stacktrace -PisNeedClean=false -PisNeedPackage=true -PexcludeFrpclib=false
 python3 scripts/collect-artifacts.py

@@ -41,8 +41,9 @@ the build environment is ready.
 - Label: `SMS 자동전달 · 개인판`.
 - Minimum/target SDK: 19 / 33.
 - Verification: APK Signature Scheme v1 and v2 succeeded using the standard
-  Android debug certificate. The `apksigner` warnings concern legacy
-  unprotected `META-INF` entries and will be addressed before release signing.
+  Android debug certificate. The legacy `META-INF` provider and mail-resource
+  entries produce v1 signature warnings; these files are retained for their
+  corresponding features. APK v2 verification also succeeds.
 - Stage C packaging: the universal debug APK is 47,712,267 bytes and includes
   `libgojni.so` for arm64-v8a, armeabi-v7a, x86, and x86_64. A clean build
   contains no `libumeng-spy.so` artifact.
@@ -54,3 +55,24 @@ Google Maven, Maven Central, JitPack, and the Huawei Cloud public Maven mirror.
 The Huawei mirror is required only for seven fixed legacy artifacts that Maven
 Central no longer serves. It is used while Gradle builds the APK; it is not an
 application runtime endpoint.
+
+## Personal release result
+
+The final application source is `8ddd2812`. Both `:app:assembleDebug` and
+`:app:assembleRelease :app:lintRelease` succeeded, with 10 JVM tests passing and
+zero debug/release lint errors (200 warnings in each report).
+
+The signed arm64-v8a and universal APKs, `SHA256SUMS`, `BUILD-INFO.json`,
+certificate/badging reports, GPL license, changes, and Korean installation guide
+are in ignored `dist/`. See `docs/VALIDATION.md` for their hashes and device status.
+
+`bash scripts/build-local.sh` is the local entry point. It regenerates release
+resource-merger output with `:app:mergeReleaseResources --rerun-tasks` before
+assembling, to avoid the stale generated-source-path failure observed on a
+second release build. This resource-only regeneration was verified separately.
+It does not run a full clean or send messages/install an APK.
+
+Personal signing files stay local in `.smsforwarder-local/signing/` and ignored
+`signing.properties`. The directory is 0700 and credential/key files are 0600.
+The public test TLS fixture under `app/src/test/resources/` is unrelated to the
+private release key.
