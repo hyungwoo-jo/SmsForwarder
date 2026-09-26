@@ -8,6 +8,7 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
+import cn.ppps.forwarder.utils.sender.TelegramRequestBuilder
 
 class SensitiveLogRedactorTest {
     @Test
@@ -49,5 +50,14 @@ class SensitiveLogRedactorTest {
 
         assertEquals("응답 본문 ✅", snapshot.body)
         assertEquals("응답 본문 ✅", snapshot.response.body()!!.string())
+    }
+
+    @Test
+    fun telegramRequestBuilderKeepsKoreanEmojiAndSelectsParseMode() {
+        val get = TelegramRequestBuilder.build("GET", "https://example.test/send", "42", "", "TEXT", "안녕 ✅")
+        val markdown = TelegramRequestBuilder.build("POST", "token", "42", "7", "MarkdownV2", "제목-본문 ✅")
+        assertTrue(get.url.contains("%EC%95%88%EB%85%95+%E2%9C%85"))
+        assertTrue(markdown.jsonBody!!.contains("\\\\-"))
+        assertTrue(markdown.jsonBody!!.contains("\"message_thread_id\":\"7\""))
     }
 }

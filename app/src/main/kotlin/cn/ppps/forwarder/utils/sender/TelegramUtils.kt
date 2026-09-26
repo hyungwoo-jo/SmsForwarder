@@ -21,7 +21,6 @@ import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
 import java.net.Proxy
-import java.net.URLEncoder
 
 class TelegramUtils private constructor() {
     companion object {
@@ -47,46 +46,8 @@ class TelegramUtils private constructor() {
                 msgInfo.getContentForSend(SettingUtils.smsTemplate)
             }
 
-            var requestUrl = if (setting.apiToken.startsWith("http")) {
-                setting.apiToken
-            } else {
-                "https://api.telegram.org/bot" + setting.apiToken + "/sendMessage"
-            }
-
-            val request = if (setting.method == "GET") {
-                requestUrl += "?chat_id=" + setting.chatId + "&text=" + URLEncoder.encode(content, "UTF-8")
-                if (setting.parseMode.isNotEmpty() && setting.parseMode != "TEXT") {
-                    requestUrl += "&parse_mode=" + setting.parseMode
-                }
-                if (setting.messageThreadId.isNotEmpty()) {
-                    requestUrl += "&message_thread_id=" + setting.messageThreadId
-                }
-                XHttp.get(requestUrl)
-            } else {
-                val bodyMap: MutableMap<String, Any> = mutableMapOf()
-                bodyMap["chat_id"] = setting.chatId
-                if (setting.messageThreadId.isNotEmpty()) {
-                    bodyMap["message_thread_id"] = setting.messageThreadId
-                }
-                when (setting.parseMode) {
-                    "MarkdownV2" -> {
-                        bodyMap["parse_mode"] = "MarkdownV2"
-                        bodyMap["text"] = escapeMarkdownV2(content)
-                    }
-
-                    "HTML" -> {
-                        bodyMap["parse_mode"] = "HTML"
-                        bodyMap["text"] = content
-                    }
-
-                    else -> {
-                        bodyMap["text"] = content
-                    }
-                }
-                bodyMap["disable_web_page_preview"] = "true"
-                val requestMsg: String = Gson().toJson(bodyMap)
-                XHttp.post(requestUrl).upJson(requestMsg)
-            }
+            val spec = TelegramRequestBuilder.build(setting.method, setting.apiToken, setting.chatId, setting.messageThreadId, setting.parseMode, content)
+            val request = if (spec.method == "GET") XHttp.get(spec.url) else XHttp.post(spec.url).upJson(spec.jsonBody!!)
 
             //设置代理
             if ((setting.proxyType == Proxy.Type.HTTP || setting.proxyType == Proxy.Type.SOCKS)
