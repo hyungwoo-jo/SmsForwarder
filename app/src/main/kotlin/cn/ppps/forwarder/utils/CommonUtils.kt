@@ -9,10 +9,8 @@ import android.graphics.Rect
 import android.os.Build
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
@@ -63,8 +61,6 @@ class CommonUtils private constructor() {
         /**
          * 这里填写你的应用隐私政策网页地址
          */
-        private const val PRIVACY_URL = "https://gitee.com/pp/SmsForwarder/raw/main/PRIVACY"
-
         /**
          * 显示隐私政策的提示
          *
@@ -103,7 +99,7 @@ class CommonUtils private constructor() {
                     }
                 }
             }.build()
-            dialog.setContent(getPrivacyContent(context))
+            dialog.setContent(getPrivacyContent())
             //开始响应点击事件
             dialog.contentView!!.movementMethod = LinkMovementMethod.getInstance()
             dialog.show()
@@ -113,8 +109,8 @@ class CommonUtils private constructor() {
         /**
          * @return 隐私政策说明
          */
-        private fun getPrivacyContent(context: Context): SpannableStringBuilder {
-            return SpannableStringBuilder().append("    ").append(getString(R.string.privacy_content_1)).append(" ").append(getString(R.string.app_name)).append("!\n").append("    ").append(getString(R.string.privacy_content_2)).append("    ").append(getString(R.string.privacy_content_3)).append(getPrivacyLink(context, PRIVACY_URL)).append(getString(R.string.privacy_content_4)).append("    ").append(getString(R.string.privacy_content_5)).append(getPrivacyLink(context, PRIVACY_URL)).append(getString(R.string.privacy_content_6)).append("    ").append(getString(R.string.privacy_content_7))
+        private fun getPrivacyContent(): SpannableStringBuilder {
+            return SpannableStringBuilder().append("    ").append(getString(R.string.privacy_content_1)).append(" ").append(getString(R.string.app_name)).append("!\n").append("    ").append(getString(R.string.privacy_content_2)).append("    ").append(getString(R.string.privacy_content_3)).append(getPrivacyLink()).append(getString(R.string.privacy_content_4)).append("    ").append(getString(R.string.privacy_content_5)).append(getPrivacyLink()).append(getString(R.string.privacy_content_6)).append("    ").append(getString(R.string.privacy_content_7))
         }
 
         /**
@@ -122,16 +118,11 @@ class CommonUtils private constructor() {
          * @return
          */
         @Suppress("SameParameterValue")
-        private fun getPrivacyLink(context: Context, privacyUrl: String): SpannableString {
+        private fun getPrivacyLink(): SpannableString {
             val privacyName = String.format(
                 getString(R.string.lab_privacy_name), getString(R.string.app_name)
             )
             val spannableString = SpannableString(privacyName)
-            spannableString.setSpan(object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    goWeb(context, privacyUrl)
-                }
-            }, 0, privacyName.length, Spanned.SPAN_MARK_MARK)
             return spannableString
         }
 

@@ -11,6 +11,7 @@ import com.xuexiang.xrouter.annotation.AutoWired
 import com.xuexiang.xrouter.launcher.XRouter
 import com.xuexiang.xui.widget.actionbar.TitleBar
 import com.xuexiang.xutil.resource.ResourceUtils
+import java.util.Locale
 
 /**
  * 服务协议【本地加载】
@@ -59,9 +60,14 @@ class ServiceProtocolFragment : BaseFragment<FragmentServiceProtocolBinding?>() 
     private val accountProtocol: String
         private get() = ResourceUtils.readStringFromAssert(ACCOUNT_PROTOCOL_ASSET_PATH)
 
-    @get:MemoryCache("privacy_protocol")
     private val privacyProtocol: String
-        private get() = ResourceUtils.readStringFromAssert(PRIVACY_PROTOCOL_ASSET_PATH)
+        private get() = ResourceUtils.readStringFromAssert(
+            if (resources.configuration.locale.language == Locale.KOREAN.language) {
+                PRIVACY_PROTOCOL_KO_ASSET_PATH
+            } else {
+                PRIVACY_PROTOCOL_ASSET_PATH
+            }
+        )
 
     companion object {
         const val KEY_PROTOCOL_TITLE = "key_protocol_title"
@@ -76,5 +82,7 @@ class ServiceProtocolFragment : BaseFragment<FragmentServiceProtocolBinding?>() 
          * 隐私政策asset本地保存路径
          */
         private const val PRIVACY_PROTOCOL_ASSET_PATH = "protocol/privacy_protocol.txt"
+
+        private const val PRIVACY_PROTOCOL_KO_ASSET_PATH = "protocol/privacy_protocol_ko.txt"
     }
 }

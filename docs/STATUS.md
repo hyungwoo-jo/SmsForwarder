@@ -5,7 +5,7 @@
 | A | DONE | Fork, source pin, project records | `origin` is `hyungwoo-jo/SmsForwarder`; `upstream` is `pppscn/SmsForwarder`; branch `personal/ko-local` starts at `a3d2302`. |
 | B | DONE | JDK 11, Android SDK, app ID, debug build | JDK 11.0.32.1, API 33, Build Tools 33.0.1, and a verified universal debug APK. |
 | C | DONE | Umeng, automatic network traffic, TLS, log secrets | Verified clean debug build with bundled FRPC libraries and no Umeng native artifact. |
-| D | TODO | Korean resources and language selection | Start after source/build structure is stable. |
+| D | DONE | Korean resources, language selection, and local privacy notice | 1,185 `values-ko` resources pass the localization validator; a Korean privacy notice is bundled locally; verified debug APK build completed. |
 | E | TODO | Automated regression checks | Add meaningful localization and transport tests. |
 | F | TODO | Local personal signing and release APK | Requires a private signing key after release build works. |
 | G | TODO | Optional GitHub Actions | Create a safe manual build workflow after local release succeeds. |
