@@ -423,9 +423,7 @@ class PhoneUtils private constructor() {
 
         // 获取号码归属地
         fun getPhoneArea(phoneNumber: String): String {
-            if (!SettingUtils.enablePhoneAreaLookup) {
-                return getString(R.string.unknown_area)
-            }
+            return PhoneAreaLookupPolicy.resolve(SettingUtils.enablePhoneAreaLookup, getString(R.string.unknown_area)) {
             val client = OkHttpClient()
             val url = "https://cx.shouji.360.cn/phonearea.php?number=$phoneNumber"
             val request = Request.Builder().url(url).build()
@@ -455,7 +453,8 @@ class PhoneUtils private constructor() {
                 job.join() // 等待协程执行完毕
             }
 
-            return result
+            result
+            }
         }
 
         //获取联系人姓名
