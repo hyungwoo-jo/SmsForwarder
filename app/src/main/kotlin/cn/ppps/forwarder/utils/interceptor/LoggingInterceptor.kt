@@ -90,8 +90,7 @@ class LoggingInterceptor(private val logId: Long) : HttpLoggingInterceptor("cust
         if (level != Level.PARAM) {
             log("------RESPONSE------" + "\nAt " + DateUtils.getNowString(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())))
         }
-        val builder = response.newBuilder()
-        val clone = builder.build()
+        val clone = response.newBuilder().build()
         var responseBody = clone.body()
         val logBody = level == Level.BODY || level == Level.PARAM
         val logHeaders = level == Level.BODY || level == Level.HEADERS
@@ -108,11 +107,10 @@ class LoggingInterceptor(private val logId: Long) : HttpLoggingInterceptor("cust
             }
 
             if (logBody && HttpHeaders.hasBody(clone)) {
-                if (HttpUtils.isPlaintext(responseBody?.contentType())) {
-                    val body = responseBody?.string()
-                    log("\tbody:$body")
-                    responseBody = ResponseBody.create(responseBody?.contentType(), body ?: "")
-                    return response.newBuilder().body(responseBody).build()
+                if (responseBody != null && HttpUtils.isPlaintext(responseBody.contentType())) {
+                    val snapshot = ResponseBodySnapshot.read(response)
+                    log("\tbody:${snapshot.body}")
+                    return snapshot.response
                 } else {
                     log("\tbody: maybe [file part] , too large too print , ignored!")
                 }
