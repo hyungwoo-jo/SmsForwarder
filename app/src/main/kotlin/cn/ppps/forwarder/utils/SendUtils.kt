@@ -24,6 +24,7 @@ import cn.ppps.forwarder.entity.setting.SocketSetting
 import cn.ppps.forwarder.entity.setting.TelegramSetting
 import cn.ppps.forwarder.entity.setting.UrlSchemeSetting
 import cn.ppps.forwarder.entity.setting.WebhookSetting
+import cn.ppps.forwarder.utils.interceptor.SensitiveLogRedactor
 import cn.ppps.forwarder.entity.setting.WeworkAgentSetting
 import cn.ppps.forwarder.entity.setting.WeworkRobotSetting
 import cn.ppps.forwarder.utils.sender.BarkUtils
@@ -230,6 +231,7 @@ object SendUtils {
 
     //更新转发日志状态
     fun updateLogs(logId: Long?, status: Int, response: String) {
+        val safeResponse = SensitiveLogRedactor.redact(response)
 
         //自动任务的不需要吐司或者更新日志
         if (logId == -1L) return
@@ -239,12 +241,12 @@ object SendUtils {
             if (status == 2) {
                 LiveEventBus.get(EVENT_TOAST_SUCCESS, String::class.java).post(getString(R.string.request_succeeded))
             } else if (status == 0) {
-                LiveEventBus.get(EVENT_TOAST_ERROR, String::class.java).post(getString(R.string.request_failed) + response)
+                LiveEventBus.get(EVENT_TOAST_ERROR, String::class.java).post(getString(R.string.request_failed) + safeResponse)
             }
             return
         }
 
-        val sendResponse = SendResponse(logId, status, response)
+        val sendResponse = SendResponse(logId, status, safeResponse)
         val request = OneTimeWorkRequestBuilder<UpdateLogsWorker>().setInputData(
             workDataOf(
                 Worker.UPDATE_LOGS to Gson().toJson(sendResponse)
