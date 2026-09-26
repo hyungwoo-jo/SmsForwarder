@@ -63,7 +63,7 @@ The final application source is `8ddd2812`. Both `:app:assembleDebug` and
 zero debug/release lint errors (200 warnings in each report).
 
 The signed arm64-v8a and universal APKs, `SHA256SUMS`, `BUILD-INFO.json`,
-certificate/badging reports, GPL license, changes, and Korean installation guide
+certificate/badging reports, BSD-2-Clause license, changes, and Korean installation guide
 are in ignored `dist/`. See `docs/VALIDATION.md` for their hashes and device status.
 
 `bash scripts/build-local.sh` is the local entry point. It regenerates release
