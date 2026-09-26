@@ -65,7 +65,7 @@ class LoggingInterceptor(private val logId: Long) : HttpLoggingInterceptor("cust
 
             if (logBody && hasRequestBody) {
                 if (HttpUtils.isPlaintext(requestBody?.contentType())) {
-                    log("\tbody:" + bodyToString(request))
+                    log("\tbody:[redacted]")
                 } else {
                     log("\tbody: maybe [file part] , too large too print , ignored!")
                 }
@@ -109,7 +109,7 @@ class LoggingInterceptor(private val logId: Long) : HttpLoggingInterceptor("cust
             if (logBody && HttpHeaders.hasBody(clone)) {
                 if (responseBody != null && HttpUtils.isPlaintext(responseBody.contentType())) {
                     val snapshot = ResponseBodySnapshot.read(response)
-                    log("\tbody:${snapshot.body}")
+                    log("\tbody:[redacted]")
                     return snapshot.response
                 } else {
                     log("\tbody: maybe [file part] , too large too print , ignored!")

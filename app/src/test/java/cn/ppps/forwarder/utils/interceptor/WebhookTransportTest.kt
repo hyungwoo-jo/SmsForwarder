@@ -1,5 +1,6 @@
 package cn.ppps.forwarder.utils.interceptor
 
+import cn.ppps.forwarder.utils.sender.WebhookBodyTemplate
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,7 +18,7 @@ class WebhookTransportTest {
         server.enqueue(MockResponse().setResponseCode(204))
         server.start()
         try {
-            val body = "한국어 줄바꿈\\n이모지 ✅"
+            val body = WebhookBodyTemplate.render("[msg]", mapOf("msg" to "한국어 줄바꿈\n이모지 ✅"), json = false)
             val request = Request.Builder().url(server.url("/ntfy"))
                 .header("X-Topic", "sms")
                 .post(RequestBody.create(MediaType.parse("text/plain; charset=utf-8"), body))
@@ -30,5 +31,14 @@ class WebhookTransportTest {
         } finally {
             server.shutdown()
         }
+    }
+
+    @Test
+    fun jsonWebhookEscapesLineBreaksButPlainTextDoesNot() {
+        val text = "첫 줄\n둘째 줄 \"인용\""
+        val template = "{\"text\":\"[msg]\"}"
+        val values = mapOf("msg" to text)
+        assertEquals("{\"text\":\"첫 줄\\n둘째 줄 \\\"인용\\\"\"}", WebhookBodyTemplate.render(template, values, json = true))
+        assertEquals(text, WebhookBodyTemplate.render("[msg]", values, json = false))
     }
 }

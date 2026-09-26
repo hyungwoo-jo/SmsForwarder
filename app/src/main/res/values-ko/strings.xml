@@ -1185,4 +1185,5 @@
   <string name="start_discovery">발견</string>
   <string name="invalid_bluetooth_mac_address">Bluetooth Mac 주소가 유효하지 않습니다. 예: AA:BB:CC:DD:EE:FF</string>
   <string name="auto_start_redmi">RedMi: 권한 관리 -&gt; 자체 시작 관리 -&gt; 앱 자체 시작 허용</string>
+  <string name="permission_request_denied">권한 요청이 거부되었습니다: </string>
 </resources>

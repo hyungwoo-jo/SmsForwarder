@@ -1243,4 +1243,5 @@
     <string name="phone_area_lookup_tips">Sends the phone number to an external service. Disabled by default.</string>
     <string name="open_releases">Open releases</string>
     <string name="korean">한국어</string>
+    <string name="permission_request_denied">Permission request denied: </string>
 </resources>

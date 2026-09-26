@@ -35,15 +35,14 @@ class TelegramUtils private constructor() {
             logId: Long = 0L,
             msgId: Long = 0L
         ) {
-            if (setting.method == "POST") {
-                msgInfo.content = htmlEncode(msgInfo.content)
-                msgInfo.simInfo = htmlEncode(msgInfo.simInfo)
-            }
+            val formattedMsgInfo = if (setting.method == "POST" && setting.parseMode == "HTML") {
+                msgInfo.copy(content = htmlEncode(msgInfo.content), simInfo = htmlEncode(msgInfo.simInfo))
+            } else msgInfo
 
             val content: String = if (rule != null) {
-                msgInfo.getContentForSend(rule.smsTemplate, rule.regexReplace, rule.title)
+                formattedMsgInfo.getContentForSend(rule.smsTemplate, rule.regexReplace, rule.title)
             } else {
-                msgInfo.getContentForSend(SettingUtils.smsTemplate)
+                formattedMsgInfo.getContentForSend(SettingUtils.smsTemplate)
             }
 
             val spec = TelegramRequestBuilder.build(setting.method, setting.apiToken, setting.chatId, setting.messageThreadId, setting.parseMode, content)

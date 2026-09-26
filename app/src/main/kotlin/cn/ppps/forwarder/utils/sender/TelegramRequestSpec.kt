@@ -9,7 +9,8 @@ object TelegramRequestBuilder {
     fun build(method: String, apiToken: String, chatId: String, threadId: String, parseMode: String, content: String): TelegramRequestSpec {
         val endpoint = if (apiToken.startsWith("http")) apiToken else "https://api.telegram.org/bot$apiToken/sendMessage"
         if (method == "GET") {
-            var url = "$endpoint?chat_id=$chatId&text=${URLEncoder.encode(content, "UTF-8")}" 
+            val separator = if (endpoint.contains("?")) "&" else "?"
+            var url = "$endpoint${separator}chat_id=${URLEncoder.encode(chatId, "UTF-8")}&text=${URLEncoder.encode(content, "UTF-8")}"
             if (parseMode.isNotEmpty() && parseMode != "TEXT") url += "&parse_mode=$parseMode"
             if (threadId.isNotEmpty()) url += "&message_thread_id=$threadId"
             return TelegramRequestSpec(method, url)

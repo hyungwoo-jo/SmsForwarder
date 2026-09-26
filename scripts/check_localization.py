@@ -22,6 +22,8 @@ def load(path: Path):
         name = element.attrib.get("name")
         if not name:
             continue
+        if name in result:
+            raise ValueError(f"duplicate resource in {path}: {name}")
         result[name] = (element, "".join(element.itertext()))
     return result
 
@@ -44,6 +46,8 @@ def main() -> int:
             errors.append(f"missing: {name}")
             continue
         translated_element, translated = korean[name]
+        if not translated.strip():
+            errors.append(f"empty translation: {name}")
         if translated_element.attrib.get("translatable") == "false":
             errors.append(f"nontranslatable override: {name}")
         if signature(value) != signature(translated):

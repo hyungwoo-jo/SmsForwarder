@@ -14,7 +14,6 @@ import cn.ppps.forwarder.utils.interceptor.BasicAuthInterceptor
 import cn.ppps.forwarder.utils.interceptor.LoggingInterceptor
 import cn.ppps.forwarder.utils.interceptor.NoContentInterceptor
 import cn.ppps.forwarder.utils.interceptor.SensitiveLogRedactor
-import com.google.gson.Gson
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.SimpleCallBack
 import com.xuexiang.xhttp2.exception.ApiException
@@ -111,10 +110,7 @@ class WebhookUtils {
             }
 
             val request = if (setting.method == "GET" && TextUtils.isEmpty(webParams)) {
-                setting.webServer += (if (setting.webServer.contains("?")) "&" else "?") + "from=" + URLEncoder.encode(
-                    from,
-                    "UTF-8"
-                )
+                requestUrl += (if (requestUrl.contains("?")) "&" else "?") + "from=" + URLEncoder.encode(from, "UTF-8")
                 requestUrl += "&content=" + URLEncoder.encode(content, "UTF-8")
                 if (!TextUtils.isEmpty(sign)) {
                     requestUrl += "&timestamp=$timestamp"
@@ -149,22 +145,24 @@ class WebhookUtils {
                 Log.d(TAG, SensitiveLogRedactor.redact("method = GET, Url = $requestUrl"))
                 XHttp.get(requestUrl).keepJson(true)
             } else if (webParams.isNotEmpty() && (isJson || isText || webParams.startsWith("{"))) {
-                webParams = msgInfo.replaceTemplate(webParams, "", "Gson", rule?.title ?: "")
-                val bodyMsg = webParams.replace("[from]", from)
-                    .replace("[content]", escapeJson(content))
-                    .replace("[msg]", escapeJson(content))
-                    .replace("[org_content]", escapeJson(orgContent))
-                    .replace("[device_mark]", escapeJson(deviceMark))
-                    .replace("[app_version]", appVersion)
-                    .replace("[title]", escapeJson(simInfo))
-                    .replace("[card_slot]", escapeJson(simInfo))
+                webParams = msgInfo.replaceTemplate(webParams, "", if (isText) "" else "Gson", rule?.title ?: "")
+                val bodyMsg = WebhookBodyTemplate.render(webParams, mapOf(
+                    "from" to from,
+                    "content" to content,
+                    "msg" to content,
+                    "org_content" to orgContent,
+                    "device_mark" to deviceMark,
+                    "app_version" to appVersion,
+                    "title" to simInfo,
+                    "card_slot" to simInfo,
+                ), json = !isText)
                     .replace(receiveTimeTag) {
                         val format = it.groups[2]?.value
                         formatDateTime(msgInfo.date, format)
                     }
                     .replace("[timestamp]", timestamp.toString())
                     .replace("[sign]", sign)
-                Log.d(TAG, SensitiveLogRedactor.redact("method = ${setting.method}, Url = $requestUrl, bodyMsg = $bodyMsg"))
+                Log.d(TAG, SensitiveLogRedactor.redact("method = ${setting.method}, Url = $requestUrl, body=[redacted]"))
                 if (isText) {
                     when (setting.method) {
                         "PUT" -> XHttp.put(requestUrl).keepJson(true).upString(bodyMsg, mediaType)
@@ -283,13 +281,6 @@ class WebhookUtils {
 
                 })
 
-        }
-
-        //JSON需要转义的字符
-        private fun escapeJson(str: String?): String {
-            if (str == null) return "null"
-            val jsonStr: String = Gson().toJson(str)
-            return if (jsonStr.length >= 2) jsonStr.substring(1, jsonStr.length - 1) else jsonStr
         }
 
         @SuppressLint("SimpleDateFormat")

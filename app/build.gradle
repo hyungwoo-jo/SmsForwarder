@@ -86,7 +86,7 @@ android {
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode build_versions.version_code
-        versionName = "${build_versions.version_name}.${buildDate}"
+        versionName = "${build_versions.version_name}.${buildDate}-personal-ko-${gitCommitId.take(8)}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
         buildConfigField "String", "GIT_COMMIT_ID", "\"${gitCommitId}\""

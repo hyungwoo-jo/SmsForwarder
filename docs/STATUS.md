@@ -6,8 +6,8 @@
 | B | DONE | JDK 11, Android SDK, app ID, debug build | JDK 11.0.32.1, API 33, Build Tools 33.0.1, and a verified universal debug APK. |
 | C | DONE | Umeng, automatic network traffic, TLS, log secrets | Verified clean debug build with bundled FRPC libraries and no Umeng native artifact. |
 | D | DONE | Korean resources, language selection, and local privacy notice | 1,185 `values-ko` resources pass the localization validator; a Korean privacy notice is bundled locally; verified debug APK build completed. |
-| E | TODO | Automated regression checks | Add meaningful localization and transport tests. |
-| F | TODO | Local personal signing and release APK | Requires a private signing key after release build works. |
+| E | DONE (local) | Automated regression checks | Final resource/unit/lint gate passed; 9 JVM tests, 0 failures/errors. Phone/watch integration remains DEVICE_PENDING as planned. |
+| F | IN_PROGRESS | Local personal signing and release APK | Dedicated local key created with restricted permissions; release build and artifact collection scripts prepared. |
 | G | TODO | Optional GitHub Actions | Create a safe manual build workflow after local release succeeds. |
 | H | TODO | Acceptance report | Record verified facts and device-pending checks. |
 

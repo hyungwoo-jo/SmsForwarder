@@ -2,6 +2,7 @@ package cn.ppps.forwarder.utils.sdkinit
 
 import android.app.Application
 import cn.ppps.forwarder.App
+import cn.ppps.forwarder.R
 import cn.ppps.forwarder.core.BaseActivity
 import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.XToastUtils
@@ -101,7 +102,7 @@ class XBasicLibInit private constructor() {
             //设置动态申请权限切片 申请权限被拒绝的事件响应监听
             XAOP.setOnPermissionDeniedListener { permissionsDenied: List<String?>? ->
                 XToastUtils.error(
-                    "权限申请被拒绝:" + StringUtils.listToString(permissionsDenied, ",")
+                    application.getString(R.string.permission_request_denied) + StringUtils.listToString(permissionsDenied, ",")
                 )
             }
         }

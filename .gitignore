@@ -24,6 +24,7 @@
 /keystore
 /local.properties
 /signing.properties
+/dist/
 /scripts/env.local.sh
 /dist
 /logs
