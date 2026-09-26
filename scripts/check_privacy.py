@@ -23,6 +23,9 @@ for path in (ROOT / "app/src/main/res").glob("values-*/strings.xml"):
         if e.attrib.get("name") in tags(new):
             errors.append(f"Locale overrides canonical tag: {path}: {e.attrib['name']}")
 settings = (ROOT / "app/src/main/kotlin/cn/ppps/forwarder/utils/SettingUtils.kt").read_text()
+http_init = (ROOT / "app/src/main/kotlin/cn/ppps/forwarder/utils/sdkinit/XBasicLibInit.kt").read_text()
+if "XHttpSDK.debug()" in http_init or ".debug(false)" not in http_init:
+    errors.append("Unredacted XHttp diagnostics were enabled")
 if "SharedPreference(SP_ENABLE_PHONE_AREA_LOOKUP, false)" not in settings:
     errors.append("Phone-area lookup default is no longer OFF")
 manifest = (ROOT / "app/src/main/AndroidManifest.xml").read_text()

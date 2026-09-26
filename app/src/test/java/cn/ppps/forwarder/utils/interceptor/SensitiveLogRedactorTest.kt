@@ -13,6 +13,16 @@ import cn.ppps.forwarder.utils.PhoneAreaLookupPolicy
 
 class SensitiveLogRedactorTest {
     @Test
+    fun redactsEscapedQuotesAndStandaloneTokens() {
+        val json = """{"text":"앞 \"민감\" 뒤","token":"secret-token"}"""
+        val redacted = SensitiveLogRedactor.redact(json)
+        assertFalse(redacted.contains("민감"))
+        assertFalse(redacted.contains("뒤"))
+        assertFalse(redacted.contains("secret-token"))
+        assertEquals("token=***", SensitiveLogRedactor.redact("token=standalone-secret"))
+    }
+
+    @Test
     fun redactsDestinationCredentialsAndMessageContent() {
         val secretValues = listOf(
             "123456:telegram-token",

@@ -3,6 +3,7 @@ package cn.ppps.forwarder.utils
 import android.content.Context
 import android.os.Build
 import cn.ppps.forwarder.App
+import cn.ppps.forwarder.utils.interceptor.SensitiveLogRedactor
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
@@ -56,7 +57,7 @@ object Log {
                     try {
                         val logTimeStamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(Date())
                         val logWriter = FileWriter(file, true)
-                        logWriter.append("$logTimeStamp | $level | $tag | $message\n\n")
+                        logWriter.append("$logTimeStamp | $level | $tag | ${SensitiveLogRedactor.redact(message)}\n\n")
                         logWriter.close()
                     } catch (e: Exception) {
                         AndroidLog.e(TAG, "Error writing to file: ${e.message}")
@@ -69,80 +70,80 @@ object Log {
     }
 
     fun v(tag: String, message: String) {
-        AndroidLog.v(tag, message)
+        AndroidLog.v(tag, SensitiveLogRedactor.redact(message))
         logToFile("V", tag, message)
     }
 
     fun v(tag: String, message: String, throwable: Throwable) {
         val logMessage = "${message}\n${getStackTraceString(throwable)}"
-        AndroidLog.v(tag, logMessage)
+        AndroidLog.v(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("V", tag, logMessage)
     }
 
     fun d(tag: String, message: String) {
-        AndroidLog.d(tag, message)
+        AndroidLog.d(tag, SensitiveLogRedactor.redact(message))
         logToFile("D", tag, message)
     }
 
     fun d(tag: String, message: String, throwable: Throwable) {
         val logMessage = "${message}\n${getStackTraceString(throwable)}"
-        AndroidLog.d(tag, logMessage)
+        AndroidLog.d(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("D", tag, logMessage)
     }
 
     fun i(tag: String, message: String) {
-        AndroidLog.d(tag, message)
+        AndroidLog.d(tag, SensitiveLogRedactor.redact(message))
         logToFile("I", tag, message)
     }
 
     fun i(tag: String, message: String, throwable: Throwable) {
         val logMessage = "${message}\n${getStackTraceString(throwable)}"
-        AndroidLog.d(tag, logMessage)
+        AndroidLog.d(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("I", tag, logMessage)
     }
 
     fun w(tag: String, message: String) {
-        AndroidLog.w(tag, message)
+        AndroidLog.w(tag, SensitiveLogRedactor.redact(message))
         logToFile("W", tag, message)
     }
 
     fun w(tag: String, throwable: Throwable) {
         val logMessage = getStackTraceString(throwable)
-        AndroidLog.w(tag, logMessage)
+        AndroidLog.w(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("W", tag, logMessage)
     }
 
     fun w(tag: String, message: String, throwable: Throwable) {
         val logMessage = "${message}\n${getStackTraceString(throwable)}"
-        AndroidLog.w(tag, logMessage)
+        AndroidLog.w(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("W", tag, logMessage)
     }
 
     fun e(tag: String, message: String) {
-        AndroidLog.e(tag, message)
+        AndroidLog.e(tag, SensitiveLogRedactor.redact(message))
         logToFile("E", tag, message)
     }
 
     fun e(tag: String, message: String, throwable: Throwable) {
         val logMessage = "${message}\n${getStackTraceString(throwable)}"
-        AndroidLog.e(tag, logMessage)
+        AndroidLog.e(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("E", tag, logMessage)
     }
 
     fun wtf(tag: String, message: String) {
-        AndroidLog.wtf(tag, message)
+        AndroidLog.wtf(tag, SensitiveLogRedactor.redact(message))
         logToFile("WTF", tag, message)
     }
 
     fun wtf(tag: String, throwable: Throwable) {
         val logMessage = getStackTraceString(throwable)
-        AndroidLog.wtf(tag, logMessage)
+        AndroidLog.wtf(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("WTF", tag, logMessage)
     }
 
     fun wtf(tag: String, message: String, throwable: Throwable) {
         val logMessage = "${message}\n${getStackTraceString(throwable)}"
-        AndroidLog.wtf(tag, logMessage)
+        AndroidLog.wtf(tag, SensitiveLogRedactor.redact(logMessage))
         logToFile("WTF", tag, logMessage)
     }
 
@@ -155,7 +156,7 @@ object Log {
     }
 
     fun println(priority: Int, tag: String, message: String) {
-        AndroidLog.println(priority, tag, message)
+        AndroidLog.println(priority, tag, SensitiveLogRedactor.redact(message))
         logToFile("P", tag, message)
     }
 }

@@ -61,10 +61,7 @@ class XBasicLibInit private constructor() {
         private fun initXHttp2(application: Application) {
             //初始化网络请求框架，必须首先执行
             XHttpSDK.init(application)
-            //需要调试的时候执行
-            if (App.isDebug) {
-                XHttpSDK.debug()
-            }
+            // Only the app's redacted interceptor may emit HTTP diagnostics.
             //设置网络请求的全局基础地址
             XHttpSDK.setBaseUrl("https://gitee.com/")
             //设置自定义的日志打印拦截器
@@ -75,7 +72,7 @@ class XBasicLibInit private constructor() {
             //XHttpSDK.addInterceptor(CustomExpiredInterceptor())
             //设置全局超时时间
             XHttp.getInstance()
-                .debug(App.isDebug)
+                .debug(false)
                 .setCacheMode(CacheMode.NO_CACHE)
                 .setTimeout(SettingUtils.requestTimeout * 1000L) //单次超时时间
             //.setRetryCount(SettingUtils.requestRetryTimes) //超时重试的次数

@@ -122,7 +122,7 @@
   <string name="copySuccess">복사했습니다</string>
   <string name="tipServiceRunning">frpc 서비스가 실행 중입니다</string>
   <string name="tipWaitService">서비스 시작 중</string>
-  <string name="app_name">SmsForwarder</string>
+  <string name="app_name">SMS 자동전달 · 개인판</string>
   <string name="notification_content">메시지 전달은 물론,\n예비 기기에 꼭 필요한 앱!\n무료 오픈 소스이며 광고를 판매하지 않습니다!</string>
   <string name="cancel">취소</string>
   <string name="discard">폐기</string>
@@ -1123,7 +1123,7 @@
   <string name="multi_languages">다국어</string>
   <string name="multi_languages_tips">시작 시 SmsF\ 인터페이스에 표시되는 기본 언어입니다.</string>
   <string name="multi_languages_toast">선택한 언어로 전환하려면 앱을 다시 시작해야 합니다.</string>
-  <string name="follow_system">Sys를 팔로우하세요.</string>
+  <string name="follow_system">시스템 언어 사용</string>
   <string name="simplified_chinese">중국어(간체)</string>
   <string name="traditional_chinese">중국어(번체)</string>
   <string name="english">영어</string>
@@ -1171,11 +1171,11 @@
   <string name="invalid_cron">예약된 작업의 시간을 설정하세요.</string>
   <string name="invalid_proxy_host">프록시 서버 호스트 이름 확인 실패: ProxyHost=%s</string>
   <string name="bluetooth_state_changed">블루투스 상태가 변경됨</string>
-  <string name="specified_state">투기. 성.</string>
+  <string name="specified_state">지정 상태</string>
   <string name="state_on">~에</string>
   <string name="state_off">끄다</string>
   <string name="bluetooth_discovery_finished">블루투스 장치 검색이 완료되었습니다</string>
-  <string name="specified_result">투기. 결의안.</string>
+  <string name="specified_result">지정 결과</string>
   <string name="discovered">발견됨</string>
   <string name="undiscovered">발견되지 않은</string>
   <string name="bluetooth_acl_connected">블루투스 장치가 연결됨</string>
